@@ -43,6 +43,9 @@ class TrayIcon(GObject.Object, Peas.Activatable):
         else:
             self.icon.set_property("pixbuf", self.normalIcon)
 
+    def set_tooltip(self, player, title):
+        self.icon.set_tooltip_text(self.wind.get_title())
+
     def do_activate(self):
         self.shell = self.object
         self.wind = self.shell.get_property("window")
@@ -87,6 +90,9 @@ class TrayIcon(GObject.Object, Peas.Activatable):
         self.icon.connect("popup-menu", self.popup_menu)
         self.icon.connect("button-press-event", self.toggle)
         self.player.connect("playing-changed", self.set_playing_icon)
+
+        self.icon.set_tooltip_text(self.wind.get_title())
+        self.player.connect("window-title-changed", self.set_tooltip)
 
     def scroll(self, widget, event):
         if self.player.playpause(True):
